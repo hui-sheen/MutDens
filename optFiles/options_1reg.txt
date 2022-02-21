@@ -1,0 +1,10 @@
+Key	Value
+mutF	mutFiles/GACA-JP.tsv
+pointsF	data/HG19RIP.tsv
+fTSS	FALSE
+baseCont	genome
+sbs	SBS6
+bsz	100
+span	2000
+outerspan	6000
+inspan	1000

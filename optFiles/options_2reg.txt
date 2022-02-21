@@ -1,0 +1,11 @@
+Key	Value
+mutF	mutFiles/E.vcf
+points1F	data/gTSS37.tsv
+points2F	data/HG19RIP.tsv
+fTSS	FALSE
+baseCont	genome
+sbs	SBS6
+bsz	100
+span	2000
+outerspan	6000
+inspan	1000

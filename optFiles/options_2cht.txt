@@ -1,0 +1,11 @@
+Key	Value
+mutF1	mutFiles/E.vcf
+mutF2	mutFiles/E2.vcf
+pointsF	data/HG19ISq1.tsv
+fTSS	FALSE
+baseCont	Origin
+sbs	SBS6
+bsz	100
+span	2000
+outerspan	6000
+inspan	1000

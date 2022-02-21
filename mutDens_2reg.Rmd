@@ -1,0 +1,131 @@
+---
+output:
+  html_document:
+    toc: true
+    toc_depth: 1
+    number_sections: true
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+library(knitr)
+library(GenomicRanges)
+source('mutDens.R')
+# options must pre-exist.
+options='optFiles/options_2reg.txt'
+df <- read.delim(options,header=T,stringsAsFactors=FALSE)
+options <- split(df$Value,df$Key)
+attach(options)
+reg1 <- unlist(strsplit(gsub('.*/','',points1F),'.',fix=T))[1]
+reg2 <- unlist(strsplit(gsub('.*/','',points2F),'.',fix=T))[1]
+proj <- paste(reg1,reg2,sep='_VS_')
+if (!dir.exists(proj)) {
+  dir.create(proj)
+}
+```
+---
+title: "`r proj`: Mutational Density Spatial Trend"
+date: "`r format(Sys.time())`"
+---
+<style type="text/css">
+.main-container {
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+---
+
+# Mutational class distribution (Region set 1 & Region set 2)
+```{r classDistrib,echo=F, comment=F, warning=F, dependson=F, message=F,results='asis',fig.show='hold',out.width='25%'}
+if (grepl('vcf$',mutF)) {
+  wgRes <- classDistrib_wg(mutF,chrCol=1,posCol=2,refCol=4,altCol=5)
+} else {
+  wgRes <- classDistrib_wg(mutF,chrCol=1,posCol=2,refCol=3,altCol=4)
+}
+frRes1 <- classDistrib_fr(wgRes$mutS,points1F,span=as.numeric(span))
+frRes2 <- classDistrib_fr(wgRes$mutS,points2F,span=as.numeric(span))
+pie(colSums(frRes1),labels=gsub('2','>',names(frRes1)),col=rainbow(ncol(frRes1)),radius=sum(frRes1)/max(sum(frRes1),sum(frRes2)),
+	main=paste('Proportion in focal region',reg1,sep='\n'))
+plot_sym(frRes1,reg1)
+pie(colSums(frRes2),labels=gsub('2','>',names(frRes2)),col=rainbow(ncol(frRes2)),radius=sum(frRes2)/max(sum(frRes1),sum(frRes2)),
+	main=paste('Proportion in focal region',reg2,sep='\n'))
+plot_sym(frRes2,reg2)
+```
+
+# Mutational density curves centered on input positions
+```{r shape,echo=F, comment=F, warning=F, dependson=F, message=F,results='asis',fig.show='hold',out.width='30%'}
+points1 <- read.delim(points1F,as.is=T,head=T)
+G1 <- getBinsG2(points1,as.numeric(bsz),as.numeric(span))
+points2 <- read.delim(points2F,as.is=T,head=T)
+G2 <- getBinsG2(points2,as.numeric(bsz),as.numeric(span))
+Gbg1 <- getBinsOut(points1,as.numeric(bsz),as.numeric(outerspan),as.numeric(inspan))
+Gbg2 <- getBinsOut(points2,as.numeric(bsz),as.numeric(outerspan),as.numeric(inspan))
+if (options$sbs=='SBS6') {
+	SBSs <- c('C2A','C2G','C2T','T2A','T2C','T2G')
+} else {
+	SBSs <- gsub(' ','',unlist(strsplit(options$sbs,',')),fix=T)
+}  
+resCmprS <- resCmprS_L2 <- resCmprS_L1 <- resShapeS_C1 <- resShapeS_C2  <- vector('list',length(SBSs))
+names(resShapeS_C1) <- names(resShapeS_C2) <- names(resCmprS_L1) <- names(resCmprS_L2) <- names(resCmprS) <- SBSs
+fTSS <- ifelse(fTSS=='TRUE',TRUE,FALSE)
+for (sbs in SBSs ) {
+	mut <- wgRes$mutS[[sbs]]
+	if (nrow(mut)>0) {
+		ll.res1 <- lamdaLocal(mut,Gbg1) 
+		ll.res2 <- lamdaLocal(mut,Gbg2)
+		resX1 <- mutDensX(mut,G1,sbs,baseCont=baseCont,bsz=as.numeric(bsz),fTSS=fTSS)
+		resX2 <- mutDensX(mut,G2,sbs,baseCont=baseCont,bsz=as.numeric(bsz),fTSS=fTSS)
+		resShapeC1 <- mutDensShape(resX1$mutCnt,ll.res1$lamda2,pTh=1e-5)
+		resShapeC2 <- mutDensShape(resX2$mutCnt,ll.res2$lamda2,pTh=1e-5)
+		colnames(resShapeC1) <- colnames(resShapeC2) <- paste(sbs,colnames(resShapeC1),sep='.')
+		rownames(resShapeC1) <- paste('Region1',rownames(resShapeC1),sep='.')
+		rownames(resShapeC2) <- paste('Region2',rownames(resShapeC2),sep='.')
+    resShapeS_C1[[sbs]] <- resShapeC1
+    resShapeS_C2[[sbs]] <- resShapeC2
+		resCmprL1 <- mutDensCmpr(rbind(resX1$mutDens[1,],resX2$mutDens[1,]))
+		resCmprL2 <- mutDensCmpr(rbind(resX1$mutDens[2,],resX2$mutDens[2,]))
+		resCmpr <- mutDensCmpr(rbind(colSums(resX1$mutDens),colSums(resX2$mutDens)))
+		colnames(resCmprL1) <- colnames(resCmprL2) <- colnames(resCmpr) <- paste(sbs,colnames(resCmpr),sep='.')
+		rownames(resCmprL1) <- paste('L1',rownames(resCmprL1),sep='.')
+		rownames(resCmprL2) <- paste('L2',rownames(resCmprL2),sep='.')
+		resCmprS[[sbs]] <- signif(resCmpr,3)
+		resCmprS_L1[[sbs]] <- signif(resCmprL1,3)
+		resCmprS_L2[[sbs]] <- signif(resCmprL2,3)
+	  write.table(resCmprL1,paste0(proj,'/',sbs,'.resCmpr_L1.txt'))
+  	write.table(resCmprL2,paste0(proj,'/',sbs,'.resCmpr_L2.txt'))
+		write.table(resCmpr,paste0(proj,'/',sbs,'.resCmpr.txt'))
+  	write.table(resShapeC1,paste0(proj,'/',sbs,'.resShape_C1.txt'))
+  	write.table(resShapeC2,paste0(proj,'/',sbs,'.resShape_C2.txt'))
+		lnames <- paste(rep(c(reg1,reg2),each=2),rep(sbs2mut2(sbs),2))
+		plot4mutDens(resX1$mutDens,resX2$mutDens,bsz=as.numeric(bsz),title=gsub('2','>',sbs),lnames=lnames,legend=T)
+	} else {
+		plot.new()
+	}
+}
+```
+
+# Peaks/Dips detected from Mutational density curves
+<font size="4">
+*Two super-tables are shown below, for each region set respectively. One super-table may include one or multiple tables, corresponding to the mutational class(es) designated in the option file. The column headers have a prefix indicating the specific mutational class (e.g., C2A, which means C>A).*
+
+Each table has four rows and six columns. The first three rows tell if a central peak (Peak), left peak (PeakL), or a right peak (PeakR) is detected. The fourth row tells if a central dip (Dip) is detected. The six six values in a row can be divided into two 3-tuples, where each tuple comprises three values: p-values (out of Poisson distribution), left bin number, and right bin number. Two 3-tuples are necessitated for the two density curves respectively. The two curves are denoted with prefix L1 and L2, rendered by default in orange and blue, and they correspond to the nominal mutation form (e.g., C>A) and its reverse complementary form (e.g., G>T), respectively.     
+</font>
+```{r showTable1,echo=F, comment=F, warning=F, dependson=F, message=F,results='asis'}
+kable(resShapeS_C1,format='markdown')
+kable(resShapeS_C2,format='markdown')
+```
+
+# Mutational density difference between two region sets
+<font size="4">
+*Tables below show results of statistical comparisons of mutational density values between region sets. The two mutually complementary nominal forms, e.g., C>A and G>T, are treated separately, along with their combined superset. Hence, three super-tables are shown below. The first two super-tables are identified with such prefixes to their row names: L1 and L2, designating the first and second forms (or curves) in the pair of the mutational class.  
+Each super-table may include one or multiple tables corresponding to the mutational class(es) designated in the option file. The column headers have a prefix indicating the specific mutational class (e.g., C2A).*
+
+Each table has three rows and three columns. The first row shows paired Wilcoxon rank test p-values between the density values in the two curves, the second row shows Kolmogorov-Smirnov test p-values between the density values in the two curves, and the third row shows the mean difference of the density values in the two curves. Three columns refer to different ranges of the curves, namely whole (whole range), left (left half range), and right (right half range).   
+</font>
+```{r showTable2,echo=F, comment=F, warning=F, dependson=F, message=F,results='asis'}
+kable(resCmprS_L1,format='markdown')
+kable(resCmprS_L2,format='markdown')
+kable(resCmprS,format='markdown')
+detach(options)
+```
+  

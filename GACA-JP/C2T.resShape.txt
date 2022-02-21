@@ -1,0 +1,5 @@
+"C2T.L1_p" "C2T.L1_ixL" "C2T.L1_ixR" "C2T.L2_p" "C2T.L2_ixL" "C2T.L2_ixR"
+"Peak" NA NA NA NA NA NA
+"PeakL" NA NA NA NA NA NA
+"PeakR" NA NA NA NA NA NA
+"Dip" 3.08956007639676e-06 20 21 NA NA NA

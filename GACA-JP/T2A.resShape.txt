@@ -1,0 +1,5 @@
+"T2A.L1_p" "T2A.L1_ixL" "T2A.L1_ixR" "T2A.L2_p" "T2A.L2_ixL" "T2A.L2_ixR"
+"Peak" NA NA NA NA NA NA
+"PeakL" NA NA NA NA NA NA
+"PeakR" NA NA NA NA NA NA
+"Dip" NA NA NA NA NA NA
