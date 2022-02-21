@@ -1,5 +1,0 @@
-"C2A.L1_p" "C2A.L1_ixL" "C2A.L1_ixR" "C2A.L2_p" "C2A.L2_ixL" "C2A.L2_ixR"
-"Peak" NA NA NA NA NA NA
-"PeakL" NA NA NA NA NA NA
-"PeakR" NA NA NA NA NA NA
-"Dip" NA NA NA NA NA NA
