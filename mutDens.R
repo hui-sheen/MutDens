@@ -78,7 +78,7 @@ plot2mutDens <- function(mutDens,totMut=NULL,
 	ymin <- min(mutDens)
 	ymax <- max(mutDens)+(max(mutDens)-min(mutDens))/10
   plot(xcoords,mutDens[2,],ylim=c(ymin,ymax),bty='l',type='n',xlab='',ylab='',cex.axis=1.5,las=1,cex.main=3,main=title)
-  mtext('Relative distance to origin',side=1,line=3,cex=1.5)
+  mtext('Relative distance to origin (bp)',side=1,line=3,cex=1.5)
   mtext(ylab,side=2,line=4.5,cex=1.5)
   if (!is.null(bandIx)) {
     L1.bounds <- bandIx[!is.na(bandIx[,1]),1:2]
@@ -115,7 +115,7 @@ plot4mutDens <- function(mutDens1,mutDens2,totMut1=NULL,totMut2=NULL,
   ymin <- min(mutDens)
   ymax <- max(mutDens)+(max(mutDens)-min(mutDens))/10
   plot(xcoords,mutDens[2,],ylim=c(ymin,ymax),bty='l',type='n',xlab='',ylab='',cex.axis=1.5,las=1,cex.main=3,main=title)
-  mtext('Relative distance to origin',side=1,line=3,cex=1.5)
+  mtext('Relative distance to origin (bp)',side=1,line=3,cex=1.5)
   mtext(ylab,side=2,line=4,cex=1.5)
 	cols <- rep(cols,2)
 	ltys <- rep(ltys,each=2)
