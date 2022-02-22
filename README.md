@@ -24,7 +24,7 @@ In the two comparison analysis modalities, MutDens may require two mutation file
 All options must be specified in an option file. The primary analysis entails 10 options, whereas the other two comparison analyses entail 11 options.
 
 Key | Meaning | Example value
-------------|--------
+----|---------|--------------
 **baseCont** | Base content normalization choice. | *{Origin, TSS, genome}*
 **bsz** | Bin size. | *100*
 **fTSS** | Feature is TSS or not? | *{TRUE, FALSE}*
