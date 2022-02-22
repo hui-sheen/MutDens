@@ -69,9 +69,8 @@ In the comparison modalities, the figure comprises four mutational density curve
 ![Four mutational density series](/fig/Curves4.JPG)
 
 ### Peaks/Dips
-When the Poisson distribution test resulted in a p-value less than 1E-5, a mutational density peak or dip that may span multiple continuous bins is indicated with a light gray rectangle in the mutational density curve plot. A table is shown for each mutational class, which includes p-values and left/right boundary bin indices.
-
-![Central Dip indicated with gray rectangle] (/fig/Dip.JPG)
+When the Poisson distribution test resulted in a p-value less than 1E-5, a mutational density peak or dip that may span multiple continuous bins is indicated with a light gray rectangle in the mutational density curve plot. A table is shown for each mutational class, which includes p-values and left/right boundary bin indices.  
+![Central Dip indicated with gray rectangle](/fig/Dip.JPG)
 
 ### Mutational density difference
 In the primary analysis modality, Paired Wilcoxon test is invoked to compare mutational density values between two complementary forms across all bins. Three different ranges are considered: left wing, right wing, and whole range (both wings). In the comparison analysis modalities,  Paired Wilcoxon test is conducted between two cohorts (between-cohort) or two region sets (between-region), rather than between the two mutational forms.  
