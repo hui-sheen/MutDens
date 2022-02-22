@@ -61,13 +61,16 @@ One pie chart illustrates the distribution of SBSs across all six classes. One h
 
 ### Mutational density curves
 In the primary analysis modality, the figure comprises two mutational density curves across the bi-directional flanking regions. The X-axis shows the length of considered flanking nucleotides, and the points in the curves indicate how much mutational density values are in the running adjacent bins. Y-axis may be labelled as # Mutations per Kilo total mutations per Mega-base (MPKM), indicating the total mutational burden has been normalized against; otherwise, Y-axis is labelled as # Mutations per Mega-base (MPM). In the TSS context (fTSS==TRUE), the orange and blue colors designate the coding and template strands of the pyrimidine-initialized SBS, and they can reversely designate the template and coding strands of the complementary purine-initialized SBS. In the non-TSS context (fTSS==FALSE), the orange and blue colors designate the pyrimidine-initialized SBS and the complementary purine-initialized SBS, respectively.  
+
 ![Two mutational density series](/fig/Curves2.JPG)
 
 In the comparison modalities, the figure comprises four mutational density curves. The differentiation between Orange and Blue colors is the same as in the primary analysis modality. The solid/dotted lines are used to differentiate the two cohorts (between-cohort) or the two region sets (between-region). 
+
 ![Four mutational density series](/fig/Curves4.JPG)
 
 ### Peaks/Dips
 When the Poisson distribution test resulted in a p-value less than 1E-5, a mutational density peak or dip that may span multiple continuous bins is indicated with a light gray rectangle in the mutational density curve plot. A table is shown for each mutational class, which includes p-values and left/right boundary bin indices.
+
 ![Central Dip indicated with gray rectangle] (/fig/Dip.JPG)
 
 ### Mutational density difference
