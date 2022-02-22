@@ -1,7 +1,9 @@
 # MutDens: Mutational density spatial trend in focal regions
 
 ## Introduction
-MutDens is an R application to thoroughly investigate mutational density patterns for any specific genomic regions. By scanning the bi-directional vicinity regions of the focal positions of any specific genomic feature, MutDens systematically characterizes the mutational density spatial trends for each of six mutational classes of Single Base Substitutions (SBSs) after adjusting for total mutation burden and local nucleotide proportion. MutDens is capable of revealing mutational density peaks, dips, and strand biases around genomic features such as transcription start sites (TSS) and replication origins (Origin).
+MutDens is an R application to thoroughly investigate mutational density patterns for any specific genomic regions. By scanning the bi-directional vicinity regions of the focal positions of any specific genomic feature, MutDens systematically characterizes the mutational density spatial trends for each of six mutational classes of Single Base Substitutions (SBSs) after adjusting for total mutation burden and local nucleotide proportion. MutDens is capable of revealing mutational density peaks, dips, and strand biases around genomic features such as transcription start sites (TSS) and replication origins (Origin).  
+![Concept Illustration](/fig/illustration.jpg)
+
 
 ## Usage
 	git clone https://github.com/hui-sheen/MutDens/  
@@ -54,15 +56,19 @@ Key | Meaning | Example value
 ## Output Description
 Generally, MutDens takes no more than a few minutes to complete the example analyses as defined by the three option files under *optFiles* (*options_1reg.txt*, *options_2cht.txt*, and *options_2reg.txt*). In the working directory, an HTML report that includes four sections is generated. In addition, a project folder named after distinctive option values is created, and several text files are saved in the project folder.  
 ### Mutational class distribution
-One pie chart illustrates the distribution of SBSs across all six classes. One horizontal stacked barplot indicates how the two complementary SBS forms balance within a mutational class. Legend label "itself" designates the pyrimidine-originated SBS (those with C/T as the source), whereas "revmut" designates the complementary form that originates from purines (with G/A as the source).
+One pie chart illustrates the distribution of SBSs across all six classes. One horizontal stacked barplot indicates how the two complementary SBS forms balance within a mutational class. Legend label "itself" designates the pyrimidine-originated SBS (those with C/T as the source), whereas "revmut" designates the complementary form that originates from purines (with G/A as the source).  
+![Example class distribution figures](/fig/classDistrib.JPG)
 
 ### Mutational density curves
-In the primary analysis modality, the figure comprises two mutational density curves across the bi-directional flanking regions. The X-axis shows the length of considered flanking nucleotides, and the points in the curves indicate how much mutational density values are in the running adjacent bins. Y-axis may be labelled as # Mutations per Kilo total mutations per Mega-base (MPKM), indicating the total mutational burden has been normalized against; otherwise, Y-axis is labelled as # Mutations per Mega-base (MPM). In the TSS context (fTSS==TRUE), the orange and blue colors designate the coding and template strands of the pyrimidine-initialized SBS, and they can reversely designate the template and coding strands of the complementary purine-initialized SBS. In the non-TSS context (fTSS==FALSE), the orange and blue colors designate the pyrimidine-initialized SBS and the complementary purine-initialized SBS, respectively. 
+In the primary analysis modality, the figure comprises two mutational density curves across the bi-directional flanking regions. The X-axis shows the length of considered flanking nucleotides, and the points in the curves indicate how much mutational density values are in the running adjacent bins. Y-axis may be labelled as # Mutations per Kilo total mutations per Mega-base (MPKM), indicating the total mutational burden has been normalized against; otherwise, Y-axis is labelled as # Mutations per Mega-base (MPM). In the TSS context (fTSS==TRUE), the orange and blue colors designate the coding and template strands of the pyrimidine-initialized SBS, and they can reversely designate the template and coding strands of the complementary purine-initialized SBS. In the non-TSS context (fTSS==FALSE), the orange and blue colors designate the pyrimidine-initialized SBS and the complementary purine-initialized SBS, respectively.  
+![Two mutational density series](/fig/Curves2.JPG)
 
 In the comparison modalities, the figure comprises four mutational density curves. The differentiation between Orange and Blue colors is the same as in the primary analysis modality. The solid/dotted lines are used to differentiate the two cohorts (between-cohort) or the two region sets (between-region). 
+![Four mutational density series](/fig/Curves4.JPG)
 
 ### Peaks/Dips
 When the Poisson distribution test resulted in a p-value less than 1E-5, a mutational density peak or dip that may span multiple continuous bins is indicated with a light gray rectangle in the mutational density curve plot. A table is shown for each mutational class, which includes p-values and left/right boundary bin indices.
+![Central Dip indicated with gray rectangle] (/fig/Dip.JPG)
 
 ### Mutational density difference
 In the primary analysis modality, Paired Wilcoxon test is invoked to compare mutational density values between two complementary forms across all bins. Three different ranges are considered: left wing, right wing, and whole range (both wings). In the comparison analysis modalities,  Paired Wilcoxon test is conducted between two cohorts (between-cohort) or two region sets (between-region), rather than between the two mutational forms.  
