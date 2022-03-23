@@ -51,6 +51,7 @@ Key | Meaning | Example value
 **points1F** | Focal position file name 1 | *data/gTSS37.tsv*
 **points2F** | Focal position file name 2 | *data/HG19RIP.tsv*
 **sbs** | Single base substitution class | *{C2A, C2G, C2T, T2A, T2C, T2G, SBS6}*
+**shapeModel** | Probability model to test for peak/dip | *{pois,nbinom}*
 **span** | Length of flanking region in either direction | *2000*
 
 ## Output Description
