@@ -69,7 +69,7 @@ In the comparison modalities, the figure comprises four mutational density curve
 ![Four mutational density series](/fig/Curves4.JPG)
 
 ### Peaks/Dips
-When the Poisson distribution test resulted in a p-value less than 1E-5, a mutational density peak or dip that may span multiple continuous bins is indicated with a light gray rectangle in the mutational density curve plot. A table is shown for each mutational class, which includes p-values and left/right boundary bin indices.  
+When the Poisson or Negative Binomial distribution test resulted in a p-value less than 1E-5, a mutational density peak or dip that may span multiple continuous bins is indicated with a light gray rectangle in the mutational density curve plot. A table is shown for each mutational class, which includes p-values and left/right boundary bin indices.  
 ![Central Dip indicated with gray rectangle](/fig/Dip.JPG)
 
 ### Mutational density difference

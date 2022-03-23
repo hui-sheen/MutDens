@@ -73,12 +73,12 @@ for (sbs in SBSs ) {
 	if (nrow(mut1)>0 & nrow(mut2)>0) {
 		totMut1 <- as.vector(table(mut1$strand)[c('+','-')])
 		totMut2 <- as.vector(table(mut2$strand)[c('+','-')])
-		ll.res1 <- lamdaLocal(mut1,Gbg)
-		ll.res2 <- lamdaLocal(mut2,Gbg)
+		ll.res1 <- paramLocal(mut1,Gbg)
+		ll.res2 <- paramLocal(mut2,Gbg)
 		resX1 <- mutDensX(mut1,G,sbs,baseCont=baseCont,bsz=as.numeric(bsz),fTSS=fTSS)
 		resX2 <- mutDensX(mut2,G,sbs,baseCont=baseCont,bsz=as.numeric(bsz),fTSS=fTSS)
-		resShapeC1 <- mutDensShape(resX1$mutCnt,ll.res1$lamda2,pTh=1e-5)
-		resShapeC2 <- mutDensShape(resX2$mutCnt,ll.res2$lamda2,pTh=1e-5)
+		resShapeC1 <- mutDensShape(resX1$mutCnt,ll.res1$lamda2,ll.res1$nbparam2,shapeModel=shapeModel,pTh=1e-5)
+		resShapeC2 <- mutDensShape(resX2$mutCnt,ll.res2$lamda2,ll.res2$nbparam2,shapeModel=shapeModel,pTh=1e-5)
 		colnames(resShapeC1) <- colnames(resShapeC2) <- paste(sbs,colnames(resShapeC1),sep='.')
 		rownames(resShapeC1) <- paste('Cohort1',rownames(resShapeC1),sep='.')
 		rownames(resShapeC2) <- paste('Cohort2',rownames(resShapeC2),sep='.')
@@ -110,7 +110,7 @@ for (sbs in SBSs ) {
 <font size="4">
 *Two super-tables are shown below, for each cohort respectively. One super-table may include one or multiple tables, corresponding to the mutational class(es) designated in the option file. The column headers have a prefix indicating the specific mutational class (e.g., C2A, which means C>A).*
 
-Each table has four rows and six columns. The first three rows tell if a central peak (Peak), left peak (PeakL), or a right peak (PeakR) is detected. The fourth row tells if a central dip (Dip) is detected. The six six values in a row can be divided into two 3-tuples, where each tuple comprises three values: p-values (out of Poisson distribution), left bin number, and right bin number. Two 3-tuples are necessitated for the two density curves respectively. The two curves are denoted with prefix L1 and L2, rendered by default in orange and blue, and they correspond to the nominal mutation form (e.g., C>A) and its reverse complementary form (e.g., G>T), respectively.     
+Each table has four rows and six columns. The first three rows tell if a central peak (Peak), left peak (PeakL), or a right peak (PeakR) is detected. The fourth row tells if a central dip (Dip) is detected. The six six values in a row can be divided into two 3-tuples, where each tuple comprises three values: p-values (out of Poisson or  Negative Binomial distribution), left bin number, and right bin number. Two 3-tuples are necessitated for the two density curves respectively. The two curves are denoted with prefix L1 and L2, rendered by default in orange and blue, and they correspond to the nominal mutation form (e.g., C>A) and its reverse complementary form (e.g., G>T), respectively.     
 </font>
 ```{r showTable1,echo=F, comment=F, warning=F, dependson=F, message=F,results='asis'}
 kable(resShapeS_C1,format='markdown')

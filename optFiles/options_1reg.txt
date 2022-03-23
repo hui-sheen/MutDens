@@ -8,3 +8,4 @@ bsz	100
 span	2000
 outerspan	6000
 inspan	1000
+shapeModel	nbinom

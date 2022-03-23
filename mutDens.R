@@ -244,16 +244,17 @@ mutDensCmpr <- function(mutDens,totMut=c(1000,1000)) {
 }
 
 #' Takes in two-rowed bin-wise Cnt values & backgrould lamda (2) and detect peak(s) & dip
+#' @param shapeModel background probability model, [pois,nbinom]
 #' @return 4-by-6 matrix, rows for Dip, Peak, PeakL, PeakR; columns for two sets of p, lIx, rIx
-mutDensShape <- function(mutCnt,lamda2,pTh=1e-5) {
+mutDensShape <- function(mutCnt,lamda2,nbparam2,pTh=1e-5,shapeModel) {
 	cnt1 <- mutCnt[1,]
 	cnt2 <- mutCnt[2,]
-	peakMat1 <- judgePeak(cnt1,lamda2[1],pTh)
-	peakMat2 <- judgePeak(cnt2,lamda2[2],pTh)
+	peakMat1 <- judgePeak(cnt1,lamda2[1],nbparam2[1,],pTh,shapeModel)
+	peakMat2 <- judgePeak(cnt2,lamda2[2],nbparam2[2,],pTh,shapeModel)
 	colnames(peakMat1) <- paste('L1',colnames(peakMat1),sep='_')
 	colnames(peakMat2) <- paste('L2',colnames(peakMat2),sep='_')
-	dip1 <- judgeDip(cnt1,lamda2[1],pTh)
-	dip2 <- judgeDip(cnt2,lamda2[2],pTh)
+	dip1 <- judgeDip(cnt1,lamda2[1],nbparam2[1,],pTh,shapeModel)
+	dip2 <- judgeDip(cnt2,lamda2[2],nbparam2[2,],pTh,shapeModel)
 	res <- cbind(peakMat1,peakMat2)
 	res <- rbind(res,matrix(c(dip1,dip2),nr=1))
 	rownames(res)[4] <- 'Dip'
@@ -355,7 +356,7 @@ plot_sym <- function(sym,sample='') {
  
 #' Estimate average value Lamda for Poisson distribution
 #' @param G GRanges of outer 100-bp bins of all points
-lamdaLocal <- function(mut,G) {
+lamdaLocal0 <- function(mut,G) {
 	library(GenomicRanges)
   mut <- GRanges(
     seqnames=mut$chr,
@@ -368,29 +369,63 @@ lamdaLocal <- function(mut,G) {
 	lamda2 <- c(itself=mean(cnts$itself),revmut=mean(cnts$revmut))
 	list(lamda2=lamda2,cnts=cnts)
 }
-
-#' Identify focal dip bin and merge adjacent ones into a final dip
-judgeDip <- function(mutCnt1,lamda,pTh=1e-5) {
+nbParamEstimate <- function(cnts) {
+	library(MASS)
+	fit <- fitdistr(cnts,'Negative Binomial')
+	size<-fit$estimate[1]
+	mu<-fit$estimate[2]
+	c(size,mu)
+}
+#' Estimate parameters (lamda; size & mu) for Poisson and Negative Binomial distribution
+#' @param G GRanges of outer 100-bp bins of all points
+paramLocal <- function(mut,G) {
+  library(GenomicRanges)
+  mut <- GRanges(
+    seqnames=mut$chr,
+    ranges=IRanges(mut$pos,width=1,names=rownames(mut)),
+    strand=mut$strand
+  )
+  mutCnt_both <- countOverlaps(G,mut,ignore.strand=T)
+  mut_strMatch <- countOverlaps(G,mut,ignore.strand=F)
+  cnts <- list(itself=mut_strMatch,revmut=mutCnt_both-mut_strMatch)
+	size_mu_1 <- nbParamEstimate(cnts$itself)
+	size_mu_2 <- nbParamEstimate(cnts$revmut) 	
+  lamda2 <- c(itself=mean(cnts$itself),revmut=mean(cnts$revmut))
+	nbparam2 <- rbind(size_mu_1,size_mu_2)
+	rownames(nbparam2) <- c('itself','revmut')
+	colnames(nbparam2) <- c('size','mu')
+  list(lamda2=lamda2,nbparam2=nbparam2,cnts=cnts)
+}
+#' @param shapeModel background probability model, [pois,nbinom]
+judgeDip <- function(mutCnt1,lamda,nbparam,pTh=1e-5,shapeModel='pois') {
   nBin <- length(mutCnt1)
   midL <- nBin%/%2; midR <- midL+1
-  dip.p <- ppois(mutCnt1,lamda,lower.tail=TRUE) #test for Dip rather than Peak
-	dip.yes <- dip.p<=pTh
-  if (dip.yes[midL] | dip.yes[midR]) {
-		ixItv <- boundPeak(midL,dip.yes)
-		p <- min(dip.p[ixItv])
-		res <- c(p,ixItv)
+	if (shapeModel=='pois') {
+  	dip.p <- ppois(mutCnt1,lamda,lower.tail=TRUE) #test for Dip rather than Peak
 	} else {
-		res <- rep(NA,3)
+		dip.p <- pnbinom(mutCnt1,size=nbparam[1],mu=nbparam[2],lower.tail=TRUE)
 	}
-	res
+  dip.yes <- dip.p<=pTh
+  if (dip.yes[midL] | dip.yes[midR]) {
+    ixItv <- boundPeak(midL,dip.yes)
+    p <- min(dip.p[ixItv])
+    res <- c(p,ixItv)
+  } else {
+    res <- rep(NA,3)
+  }
+  res
 }
-
+#' @param shapeModel background probability model, [pois,nbinom]
 #' Identify focal peak bin and merge adjacent ones into a final peak
 #' Operate on one party of the mutation pair (so it is called mutCnt1)
-judgePeak <- function(mutCnt1,lamda,pTh=1e-5) {
+judgePeak <- function(mutCnt1,lamda,nbparam,pTh=1e-5,shapeModel='pois') {
 	nBin <- length(mutCnt1)
 	midL <- nBin%/%2; midR <- midL+1
-	peak.p <- ppois(mutCnt1,lamda,lower.tail=FALSE)
+	if (shapeModel=='pois') {
+		peak.p <- ppois(mutCnt1,lamda,lower.tail=FALSE)
+	} else {
+		peak.p <- pnbinom(mutCnt1,size=nbparam[1],mu=nbparam[2],lower.tail=FALSE)
+	}
 	peak.yes <- peak.p<=pTh
 	peakMat <- matrix(NA,nr=3,nc=3)
 	rownames(peakMat) <- c('Peak','PeakL','PeakR')

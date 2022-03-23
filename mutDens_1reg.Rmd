@@ -64,9 +64,9 @@ for (sbs in SBSs ) {
 	mut <- wgRes$mutS[[sbs]]
 	if (nrow(mut)>0) {
 		totMut <- as.vector(table(mut$strand)[c('+','-')])
-		ll.res <- lamdaLocal(mut,Gbg)
+		ll.res <- paramLocal(mut,Gbg)
 		resX <- mutDensX(mut,G,sbs,baseCont=baseCont,bsz=as.numeric(bsz),fTSS=fTSS)
-		resShape <- mutDensShape(resX$mutCnt,ll.res$lamda2,pTh=1e-5)
+		resShape <- mutDensShape(resX$mutCnt,ll.res$lamda2,ll.res$nbparam2,shapeModel=shapeModel,pTh=1e-5)
 		if (all(is.na(resShape))) {
 			bandIx <- NULL
 		} else {
@@ -97,7 +97,7 @@ for (sbs in SBSs ) {
 <font size="4">
 *The super-table below may include one or multiple tables corresponding to the mutational class(es) designated in the option file. The column headers have a prefix indicating the specific mutational class (e.g., C2A).*
 
-Each table has four rows and six columns. The first three rows tell if a central peak (Peak), left peak (PeakL), or a right peak (PeakR) is detected. The fourth row tells if a central dip (Dip) is detected. All six columns can be separated into one left block and one right block, each comprising three columns: p-values (out of Poisson distribution), left bin numbers, and right bin numbers. The three columns in the left block and the three columns in the right block correspond to the two density curves respectively ("L1" and "L2"), which correspond to the nominal mutation form and its reverse complementary form respectively.     
+Each table has four rows and six columns. The first three rows tell if a central peak (Peak), left peak (PeakL), or a right peak (PeakR) is detected. The fourth row tells if a central dip (Dip) is detected. All six columns can be separated into one left block and one right block, each comprising three columns: p-values (out of Poisson or Negative Binomial distribution), left bin numbers, and right bin numbers. The three columns in the left block and the three columns in the right block correspond to the two density curves respectively ("L1" and "L2"), which correspond to the nominal mutation form and its reverse complementary form respectively.     
 </font>
 ```{r showTable1,echo=F, comment=F, warning=F, dependson=F, message=F,results='asis'}
 kable(resShapeS,format='markdown')
