@@ -10,9 +10,9 @@ MutDens is an R application to thoroughly investigate mutational density pattern
 	cd MutDens # the root directory of MutDens  	
 	R # open an R session  
     	>library('rmarkdown')  
-    	>render('mutDens_1reg.Rmd') # Primary analysis of only 1 sample cohort  
-    	>render('mutDens_2cht.Rmd') # Comparison analysis between two sample cohorts  
-    	>render('mutDens_2reg.Rmd') # Comparison analysis between two region sets  
+    	>render('mutDens_1reg.Rmd') # Primary analysis of only 1 sample cohort, relying on *optFiles/options_1reg.txt*    
+    	>render('mutDens_2cht.Rmd') # Comparison analysis between two sample cohorts, relying on *optFiles/options_2cht.txt*  
+    	>render('mutDens_2reg.Rmd') # Comparison analysis between two region sets, relying on *optFiles/options_2reg.txt*  
 
 ## Input files
 In the primary analysis modality, MutDens requires two input files, one of somatic mutations and the other of focal genomic positions.  
@@ -35,7 +35,7 @@ HG38ISq1.tsv | Origin (1st quantile) | GRCh38
 In the two comparison analysis modalities, MutDens may require two mutation files (between-cohort) or two focal position files (between-region).  The necessary input files are specificed in an option file, along with other adjustable options.  
 
 ## Options
-All options must be specified in an option file. The primary analysis entails 10 options, whereas the other two comparison analyses entail 11 options. Template option files for the three analysis modalities are included in folder *optFiles*.
+All options must be specified in an option file. The primary analysis entails 10 options, whereas the other two comparison analyses entail 11 options. Template option files for the three analysis modalities are included in folder **optFiles** (*optFiles/options_1reg.txt, optFiles/options_2cht.txt, optFiles/options_2reg.txt*), which can be copied and modified to reflect user's real analysis parameters.
 
 Key | Meaning | Example value
 ----|---------|--------------
