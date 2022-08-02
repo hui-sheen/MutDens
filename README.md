@@ -21,7 +21,7 @@ A mutation file can be a VCF file or a TSV file. If in a TSV file, it should inc
 ### focal position file
 A focal position file designates point positions in the genome where we will investigate the mutational density trends in the flanking regions. A focal position file should be tab-delimited, and it should contain at least two columns (chromosome, position, strand) with a header row. A column with header "strand" is optional, which values of "+" or "-" are given.    
 For humans (hg38 and hg19), the *data/* folder contains coordinate files for five genomic features:  Transcription Start Site (TSS), Transcription End Site (TES), replication oritin Initiation Site(IS), enhancer (eRNA), and Retrotransposon Insertion Polymorphism (RIP) sites. TSS and TES are further distinguished into those of protein-coding genes (proTSS and proTES) and lncRNAs (lncTSS and lncTES), respectively. TSS and TES files are also available for the following other model organisms: canFam3, danRer11, dm6, galGal6, hg38, hg19, mm39, rheMac10, rn7, sacCer3. 
-Please examine the files in *data/* for a full list of pre-built genomic features in several supported reference genomes. Users' self-prepared coordinate files for interesting features are recommended to be stored there too, following the same format as the prebuilt ones. Presently, MutDens tackles nine species as enumerated above. In principle, MutDens can be extended to tackle any species for which a ![BSgenome.*](https://bioconductor.org/packages/release/BiocViews.html#___AnnotationData) is released in Bioconductor.  
+Please examine the files in *data/* for a full list of pre-built genomic features in several supported reference genomes. Users' self-prepared coordinate files for interesting features are recommended to be stored there too, following the same format as the prebuilt ones. Presently, MutDens tackles nine species as enumerated above. In principle, MutDens can be extended to tackle any species for which an [BSgenome.*](https://bioconductor.org/packages/release/BiocViews.html#___AnnotationData) annotation package is released in Bioconductor.  
 All prebuilt focal position files conform to this file naming format: **[gFt]_[gn].tsv**, where *gFt* designates the genomic feature and *gn* the code for the species or genome. A few example files are explained in the table below.  
 file name | feature | reference genome
 ----------|---------|-----------------
@@ -50,11 +50,11 @@ Key | Meaning | Example value
 **gFt1** | Genomic feature 1 | *{IS, TSS, RIP, ...}*
 **gFt2** | Genomic feature 2 | *{IS, TSS, RIP, ...}*
 **gn** | Genome | *{canFam3, danRer11, dm6, galGal6, hg38, hg19, mm39, rheMac10, rn7, sacCer3}*
-**inspan** | Proximal boundary of farther flanking regions | *1000*
+**inspan** | Proximal boundary of farther flanking regions | *2000*
 **mutF** | Mutation file name | *mutFiles/GACA-JP.tsv*
 **mutF1** | Mutation file name 1 | *mutFiles/LICA-CN.tsv*
 **mutF2** | Mutation file name 2 | *mutFiles/LICA-FR.tsv*
-**outerspan** | Distal boundary of farther flanking regions | *6000*
+**outerspan** | Distal boundary of farther flanking regions | *7000*
 **pointsF** | Focal position file name | *data/HG19ISq1.tsv*
 **points1F** | Focal position file name 1 | *data/gTSS37.tsv*
 **points2F** | Focal position file name 2 | *data/HG19RIP.tsv*
@@ -86,7 +86,7 @@ When the Poisson or Negative Binomial distribution test resulted in a p-value le
 #### Wilcoxon test to compare two mutation density series
 In the primary analysis modality, Paired Wilcoxon test is invoked to compare mutational density values between two complementary forms across all bins. Three different ranges are considered: left wing, right wing, and whole range (both wings). In the comparison analysis modalities,  Paired Wilcoxon test is conducted between two cohorts (between-cohort) or two region sets (between-region), rather than between the two mutational forms.  
 #### WAVK test to decern non-random spatial trends
-The WAVK test is implemented by virtue of the ![funtimes](https://cran.r-project.org/web/packages/funtimes/index.html) package. This test is conducted on one mutation density series only, and the results are shown for the two density series separately. Users can use the WAVK test results as a corroboration for any significant peaks/dips detected in the section above.  
+The WAVK test is implemented by virtue of the [funtimes](https://cran.r-project.org/web/packages/funtimes/index.html) package. This test is conducted on one mutation density series only, and the results are shown for the two density series separately. Users can use the WAVK test results as a corroboration for any significant peaks/dips detected in the section above.  
 
 
 
