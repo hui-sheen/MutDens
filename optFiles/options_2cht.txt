@@ -1,0 +1,14 @@
+Key	Value
+bsz	100
+calcSrc	NULL
+gFt	TSS
+gn	hg19
+inspan	2000
+mutF1	mutFiles/LICA-CN.off10.tsv
+mutF2	mutFiles/LICA-FR.off10.tsv
+outerspan	7000
+pointsF	data/proTSS_hg19.tsv
+sbs	SBS6
+shapeModel	pois
+span	2000
+triCont	FALSE

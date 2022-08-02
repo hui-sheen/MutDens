@@ -1,0 +1,15 @@
+Key	Value
+bsz	100
+calcSrc	NULL
+gFt1	ISq1
+gFt2	eRNA
+gn	hg19
+inspan	2000
+mutF	mutFiles/LICA-CN.off10.tsv
+outerspan	7000
+points1F	data/ISq1_hg19.tsv
+points2F	data/eRNA_hg19.tsv
+sbs	SBS6
+shapeModel	pois
+span	2000
+triCont	FALSE

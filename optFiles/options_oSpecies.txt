@@ -1,0 +1,13 @@
+Key	Value
+bsz	100
+calcSrc	NULL
+gFt	proTES
+gn	rheMac10
+inspan	2000
+mutF	mutFiles/fakeOspecies_oddChr.tsv
+outerspan	7000
+pointsF	data/proTES_rheMac10.tsv
+sbs	C2T
+shapeModel	nbinom
+span	2000
+triCont	TRUE
