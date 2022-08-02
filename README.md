@@ -35,7 +35,7 @@ proTSS_hg38.tsv | TSS of protein-coding genes | GRCh38
 
 In the two comparison analysis modalities, MutDens may require two mutation files (between-cohort) or two focal position files (between-region).  The necessary input files are specificed in an option file, along with other adjustable options.  
 
-## Of Note: Base Content
+### Of Note: Base Content
 By default (*calcSrc*=NULL, see below), MutDens seeks to calculate the vicinity base content (A/T/G/C proportion values) on the fly. The resultant base content file is named as **atgc2000-100_[gFt]_[gn].tsv**. The user can move the resultant atgc* file to data/, thereby next time MutDens can immediately locate this base content file for the *gFt* feature in the *gn* reference genome.  
 ## Options
 All options must be specified in an option file. Template option files for the three analysis modalities are included in folder *optFiles*. Users can modify and rename these template options to reflect their real analysis requirements. An option file does not need to be put in *optFiles*, only that its absolute or relative path needs to be correctly specified in the analysis Rmd file.  
