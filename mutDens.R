@@ -341,7 +341,7 @@ mutDensShape <- function(mutCnt,lamda2,nbparam2,pTh=1e-5,shapeModel) {
 #' Ignoring innate strand of points0; working on + strand only
 getBinsOut <- function(points0,bsz=100,outerspan=7000,inspan=2000) {
   library(GenomicRanges,quietly=T,warn.conflicts=F)
-  colnames(points0)[1:3] <- c('chr','pos','strand')
+  colnames(points0)[1:2] <- c('chr','pos')#,'strand')
   innerBins <- (outerspan-inspan)%/%bsz
   G <- NULL
 	dn.j <- GRanges(
